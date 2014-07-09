@@ -90,12 +90,24 @@ sub next {
 	return $self->get_row($xls, @$cc);
 }
 
+=head2 get_row_values
+
+Used by next
+
+=cut
+
 sub get_row_values {
 	my ($self, $xls, $from, $to) = @_;
 	my @cells;
 	push @cells, $xls->get_cell($self->lineno, $_)->value for $from..$to;
 	return @cells;
 }
+
+=head2 get_row
+
+Used by next
+
+=cut
 
 sub get_row {
 	my ($self, $xls, $from, $to) = @_;

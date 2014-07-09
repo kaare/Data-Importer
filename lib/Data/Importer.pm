@@ -9,6 +9,8 @@ use DateTime::Format::Pg;
 
 with 'MooseX::Traits';
 
+# ABSTRACT: Framework to import row-based (spreadsheet-, csv-) files into a database
+
 =head1 Description
 
 Base class for handling the import of the spreadsheet file

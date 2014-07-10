@@ -53,7 +53,7 @@ sub next {
 	# Use the first row as column names:
 	if (!$csv->column_names) {
 		my $row = $csv->getline($file);
-		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} $csv->fields;
+		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} @$row;
 		die "Only one column detected, please use comma ',' to separate data." if @fieldnames < 2;
 
 		$csv->column_names(@fieldnames);

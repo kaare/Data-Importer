@@ -1,6 +1,8 @@
 Revision history for Data::Importer
 
 {{$NEXT}}
+
+0.002     2014-07-10 18:38:49CEST+0200 Europe/Copenhagen
  - Add missing dependencies to the makefile
  - Apparantly csv->fields is not consistent over Perl releases. Fixed
 

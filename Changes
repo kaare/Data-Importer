@@ -1,6 +1,7 @@
 Revision history for Data::Importer
 
 {{$NEXT}}
+ - Rework the import part to also be row based, like the validate step.
 
 0.002     2014-07-10 18:38:49CEST+0200 Europe/Copenhagen
  - Add missing dependencies to the makefile

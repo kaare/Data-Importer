@@ -5,3 +5,7 @@ __PACKAGE__->add_columns(qw/ id name ingredients qty /);
 __PACKAGE__->set_primary_key('id');
 
 1;
+
+# COPYRIGHT
+
+__END__

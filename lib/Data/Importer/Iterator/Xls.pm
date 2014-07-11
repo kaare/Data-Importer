@@ -116,6 +116,9 @@ sub get_row {
 	$cells{ $colnames->[$_ - $from] } = $xls->get_cell($self->lineno, $_)->value for $from..$to;
 	return \%cells;
 }
-1;
+
+__PACKAGE__->meta->make_immutable;
 
 # COPYRIGHT
+
+__END__

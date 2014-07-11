@@ -1,6 +1,8 @@
 Revision history for Data::Importer
 
 {{$NEXT}}
+ - Pod
+ - Specify overridable methods
 
 0.003     2014-07-10 22:38:00+02:00 Europe/Copenhagen
  - Rework the import part to also be row based, like the validate step.

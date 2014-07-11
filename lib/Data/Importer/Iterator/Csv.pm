@@ -62,6 +62,8 @@ sub next {
     return $csv->getline_hr($file);
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
 
 # COPYRIGHT
+
+__END__

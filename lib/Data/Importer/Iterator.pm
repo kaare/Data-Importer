@@ -81,6 +81,8 @@ sub next {
 	return 'should be sub classed';
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
 
 # COPYRIGHT
+
+__END__

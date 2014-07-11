@@ -88,6 +88,8 @@ sub next {
     return { map { $columns->[$colno++] => $_ } @cells };
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
 
 # COPYRIGHT
+
+__END__

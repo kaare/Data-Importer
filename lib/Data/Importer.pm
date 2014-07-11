@@ -11,13 +11,47 @@ with 'MooseX::Traits';
 
 # ABSTRACT: Framework to import row-based (spreadsheet-, csv-) files into a database
 
-=head1 Description
+=head1 DESCRIPTION
 
 Base class for handling the import of the spreadsheet file
 
-=head1 Atttributes
+Subclass this.
+
+=head1 SYNOPSIS
+
+# Your Importer class
+package My::Importer;
+
+use Moose;
+
+extends 'Data::Importer';
+
+sub validate_row {
+	my ($self, $row, $lineno) = @_;
+	# XXX validation
+	# return $self->add_error("Some error at $lineno") if some condition;
+	# return $self->add_warning("Some warning at $lineno") if some condition;
+	$self->add_row($row);
+}
+
+sub import_row {
+	my ($self, $row) = @_;
+	$schema->resultset('Table')->create($row) or die;
+}
+
+# Import the file like this
+
+my $import = My::Importer->new(
+	schema => $schema,
+	file_name => $file_name,
+);
+$import->do_work;
+
+=head1 ATTTRIBUTES
 
 =head2 schema
+
+Yes, we use DBIx::Class. Send your schema.
 
 =cut
 
@@ -75,7 +109,6 @@ has 'import_iterator' => (
 	is => 'ro',
 	lazy_build => 1,
 );
-
 
 =head2 rows
 
@@ -214,18 +247,13 @@ sub validate {
 
 Handle each individual row.
 
+This has to be written in the subclass
+
 =cut
 
 sub validate_row {
 	my ($self, $row, $lineno) = @_;
-
-	# XXX validation
-	# return $self->add_error("Some error at $lineno") if some condition;
-	# return $self->add_warning("Some warning at $lineno") if some condition;
-
-	# XXX processing
-	# XXX caching
-
+	die "You have to provide your own validate_row";
 }
 
 =head2 import_run
@@ -256,7 +284,10 @@ sub import_run {
 
 =head2 import_transaction
 
-Called inside the transaction block
+Called inside the transaction block.
+
+This is the method to add method modifiers to if processing before or after the
+row import loop is necessary.
 
 =cut
 
@@ -266,6 +297,19 @@ sub import_transaction {
 	for my $row (@{ $self->rows }) {
 		$self->import_row($row);
 	}
+}
+
+=head2 import_row
+
+Handle each individual row.
+
+This has to be written in the subclass
+
+=cut
+
+sub import_row {
+	my ($self, $row, $lineno) = @_;
+	die "You have to provide your own import_row";
 }
 
 =head2 import_failed
@@ -281,7 +325,7 @@ sub import_failed {
 
 =head2 import_succeeded
 
-Called after the import has finished succesful
+Called after the import has finished succesfully
 
 =cut
 
@@ -300,3 +344,5 @@ sub report {
 __PACKAGE__->meta->make_immutable;
 
 # COPYRIGHT
+
+__END__

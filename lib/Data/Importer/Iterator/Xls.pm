@@ -79,7 +79,7 @@ sub next {
 	state $cc = [$xls->col_range];
 	# Use the first row as column names:
 	if (!$self->has_column_names) {
-		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} $self->get_row_values($xls, @$cc);
+		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} $self->_get_row_values($xls, @$cc);
 		die "Only one column detected, please use comma ',' to separate data." if @fieldnames < 2;
 
 		$self->column_names(\@fieldnames);
@@ -87,29 +87,17 @@ sub next {
 	$self->inc_lineno;
 
 	return if grep {!defined $xls->get_cell($self->lineno, $_)} ($cc->[0]..$cc->[1]);
-	return $self->get_row($xls, @$cc);
+	return $self->_get_row($xls, @$cc);
 }
 
-=head2 get_row_values
-
-Used by next
-
-=cut
-
-sub get_row_values {
+sub _get_row_values {
 	my ($self, $xls, $from, $to) = @_;
 	my @cells;
 	push @cells, $xls->get_cell($self->lineno, $_)->value for $from..$to;
 	return @cells;
 }
 
-=head2 get_row
-
-Used by next
-
-=cut
-
-sub get_row {
+sub _get_row {
 	my ($self, $xls, $from, $to) = @_;
 	my $colnames = $self->column_names;
 	my %cells;

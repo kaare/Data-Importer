@@ -187,10 +187,6 @@ has 'timestamp' => (
 
 =head1 METHODS
 
-=head2 _build_import_type
-
-Build the import type. It can be either csv, xls or ods.
-
 =cut
 
 sub _build_import_type {
@@ -200,12 +196,6 @@ sub _build_import_type {
 
 	return lc $1;
 }
-
-=head2 _build_import_iterator
-
-Build the import iterator..
-
-=cut
 
 sub _build_import_iterator {
 	my $self = shift;

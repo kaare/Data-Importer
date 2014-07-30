@@ -1,6 +1,8 @@
 Revision history for Data::Importer
 
 {{$NEXT}}
+
+0.004     2014-07-30 16:49:58+02:00 Europe/Copenhagen
  - Pod
  - Specify overridable methods
  - Add mandatory and optional attributes. Mandatory fields are used to check with the actual file to see if

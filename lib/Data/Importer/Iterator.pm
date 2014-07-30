@@ -40,6 +40,28 @@ has file_name => (
 	isa => 'Str',
 );
 
+=head2 mandatory
+
+Required input columns
+
+=cut
+
+has 'mandatory' => (
+	is => 'ro',
+	isa => 'ArrayRef',
+);
+
+=head2 optional
+
+Required input columns
+
+=cut
+
+has 'optional' => (
+	is => 'ro',
+	isa => 'ArrayRef',
+);
+
 =head1 "PRIVATE" ATTRIBUTES
 
 =head2 file

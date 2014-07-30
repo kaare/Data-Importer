@@ -26,6 +26,10 @@ use Moose;
 
 extends 'Data::Importer';
 
+sub mandatory_columns {
+	return [qw/name description price/];
+}
+
 sub validate_row {
 	my ($self, $row, $lineno) = @_;
 	# XXX validation
@@ -97,6 +101,32 @@ has 'import_type' => (
 	lazy_build => 1,
 );
 
+=head2 mandatory
+
+Required input columns
+
+=cut
+
+has 'mandatory' => (
+	is => 'ro',
+	isa => 'ArrayRef',
+	lazy_build => 1,
+	builder => 'mandatory_columns'
+);
+
+=head2 optional
+
+Required input columns
+
+=cut
+
+has 'optional' => (
+	is => 'ro',
+	isa => 'ArrayRef',
+	lazy_build => 1,
+	builder => 'optional_columns'
+);
+
 =head1 "PRIVATE" ATTRIBUTES
 
 =head2 import_iterator
@@ -130,6 +160,36 @@ has 'rows' => (
 
 An arrayref w/ all the warnings picked up during processing
 
+These methods are associated with warnings:
+
+=head3 all_warnings
+
+Returns all elements
+
+=head3 add_warning
+
+Add a warning
+
+=head3 join_warnings
+
+Join all warnings
+
+=head3 count_warnings
+
+Returns the number of warnings
+
+=head3 has_warnings
+
+Returns true if there are warnings
+
+=head3 has_no_warnings
+
+Returns true if there isn't any warning
+
+=head3 clear_warnings
+
+Clear out all warnings
+
 =cut
 
 has 'warnings' => (
@@ -151,6 +211,36 @@ has 'warnings' => (
 =head2 errors
 
 An arrayref w/ all the errors picked up during processing
+
+These methods are associated with errors:
+
+=head3 all_errors
+
+Returns all elements
+
+=head3 add_error
+
+Add a error
+
+=head3 join_errors
+
+Join all errors
+
+=head3 count_errors
+
+Returns the number of errors
+
+=head3 has_errors
+
+Returns true if there are errors
+
+=head3 has_no_errors
+
+Returns true if there isn't any error
+
+=head3 clear_errors
+
+Clear out all errors
 
 =cut
 
@@ -202,8 +292,28 @@ sub _build_import_iterator {
 	my $import_type = ucfirst $self->import_type;
 	my $classname = "Data::Importer::Iterator::$import_type";
 	eval "require $classname" or die $@;
-	return $classname->new(file_name => $self->file_name);
+	return $classname->new(
+		file_name => $self->file_name,
+		mandatory => $self->mandatory,
+		optional  => $self->optional,
+	);
 }
+
+=head2 mandatory_columns
+
+Builds the mandatory attribute, which gives an arrayref with the required columns.
+
+=cut
+
+sub mandatory_columns { [] }
+
+=head2 optional_columns
+
+Builds the optional attribute, which gives an arrayref with the optional columns.
+
+=cut
+
+sub optional_columns { [] }
 
 =head2 do_work
 
@@ -215,7 +325,8 @@ sub do_work {
 	my $self = shift;
 	$self->validate;
 	$self->import_run unless $self->dry_run or $self->has_errors;
-	$self->report
+	$self->report;
+	return 1;
 }
 
 =head2 validate
@@ -329,6 +440,8 @@ Make a report of what happened
 
 sub report {
 	my ($self) = @_;
+	warn 'Warnings: ' . join("\n", @{ $self->warnings }) if $self->has_warnings;
+	warn 'Errors ' . join("\n", @{ $self->errors }) if $self->has_errors;
 }
 
 __PACKAGE__->meta->make_immutable;

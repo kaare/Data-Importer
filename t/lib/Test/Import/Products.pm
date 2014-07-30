@@ -32,7 +32,7 @@ Performs the actual database update
 
 sub import_row {
 	my ($self, $row) = @_;
-	next unless $row->{item_name};
+	return unless $row->{item_name};
 
 	my $schema = $self->schema;
 

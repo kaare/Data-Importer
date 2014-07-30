@@ -3,6 +3,10 @@ Revision history for Data::Importer
 {{$NEXT}}
  - Pod
  - Specify overridable methods
+ - Add mandatory and optional attributes. Mandatory fields are used to check with the actual file to see if
+   it contains the necessary columns.
+   For now the optional attribute is, well, optional.
+ - Make xls iterator more failsafe
 
 0.003     2014-07-10 22:38:00+02:00 Europe/Copenhagen
  - Rework the import part to also be row based, like the validate step.

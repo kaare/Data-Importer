@@ -78,8 +78,13 @@ sub next {
 	if (!$self->has_column_names) {
 		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} row($ods->[$self->sheet], $self->lineno);
 		die "Only one column detected, please use comma ',' to separate data." if @fieldnames < 2;
+		my %fieldnames = map {$_ => 1} @fieldnames;
+		if (my @missing = grep {!$fieldnames{$_} } @{ $self->mandatory }) {
+			die 'Column(s) required, but not found:' . join ', ', @missing;
+		}
 
 		$self->column_names(\@fieldnames);
+		$self->inc_lineno;
 	}
 	my $columns = $self->column_names;
 	my $colno = 0;

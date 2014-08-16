@@ -3,6 +3,7 @@ package Data::Importer::Iterator::Xls;
 use 5.010;
 use namespace::autoclean;
 use Moose;
+use Encode qw(encode);
 use Spreadsheet::ParseExcel;
 
 extends 'Data::Importer::Iterator';
@@ -108,7 +109,7 @@ sub _get_row {
 	for my $colno ($from..$to) {
 		my $colname = $colnames->[$colno - $from] // '';
 		if (my $cell = $xls->get_cell($self->lineno, $colno)) {
-			$cells{ $colname } = $cell->value;
+			$cells{ $colname } = encode('utf-8', $cell->value);
 			$cells++;
 		} else {
 			$cells{ $colname } = undef;

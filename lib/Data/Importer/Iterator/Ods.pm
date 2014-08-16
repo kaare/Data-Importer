@@ -3,6 +3,7 @@ package Data::Importer::Iterator::Ods;
 use 5.010;
 use namespace::autoclean;
 use Moose;
+use Encode qw(encode);
 use Spreadsheet::Read qw/ReadData row/;
 
 extends 'Data::Importer::Iterator';
@@ -90,7 +91,7 @@ sub next {
 	my $colno = 0;
 	my @cells = row($ods->[$self->sheet], $self->lineno);
 	return unless grep { $_ } @cells;
-    return { map { $columns->[$colno++] => $_ } @cells };
+    return { map { $columns->[$colno++] => encode('utf-8', $_) } @cells };
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -2,7 +2,7 @@ Revision history for Data::Importer
 
 {{$NEXT}}
  - Add a Makefile.PL
- - Encode values (ods, xls)
+ - Option to encode values (ods, xls)
 
 0.004     2014-07-30 16:49:58+02:00 Europe/Copenhagen
  - Pod

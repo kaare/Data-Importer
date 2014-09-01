@@ -62,6 +62,18 @@ has 'optional' => (
 	isa => 'ArrayRef',
 );
 
+=head2 encoding
+
+The encoding of the spreadsheet
+
+=cut
+
+has encoding => (
+	is => 'ro',
+	isa => 'Str',
+	predicate => 'has_encoding',
+);
+
 =head1 "PRIVATE" ATTRIBUTES
 
 =head2 file

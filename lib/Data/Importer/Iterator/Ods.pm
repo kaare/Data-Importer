@@ -91,7 +91,9 @@ sub next {
 	my $colno = 0;
 	my @cells = row($ods->[$self->sheet], $self->lineno);
 	return unless grep { $_ } @cells;
-    return { map { $columns->[$colno++] => encode('utf-8', $_) } @cells };
+
+    @cells = map { encode($self->encoding, $_) } @cells if $self->has_encoding;
+    return { map { $columns->[$colno++] => $_ } @cells };
 }
 
 __PACKAGE__->meta->make_immutable;

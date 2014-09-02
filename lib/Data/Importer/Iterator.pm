@@ -74,36 +74,7 @@ has encoding => (
 	predicate => 'has_encoding',
 );
 
-=head1 "PRIVATE" ATTRIBUTES
-
-=head2 file
-
-The import file
-
-=cut
-
-has 'file' => (
-	is => 'ro',
-	lazy_build => 1,
-);
-
 =head1 METHODS
-
-=head2 _build_file
-
-The lazy builder for the file
-
-The base class opens a file as UTF-8 and returns it.
-
-=cut
-
-sub _build_file {
-	my $self = shift;
-	my $filename = $self->file_name;
-	open(my $file, "<:encoding(utf8)", $filename) or die "$filename: $!";
-
-	return $file;
-}
 
 =head2 next
 

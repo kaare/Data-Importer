@@ -110,10 +110,10 @@ sub _get_row {
 		my $colname = $colnames->[$colno - $from] // '';
 		if (my $cell = $xls->get_cell($self->lineno, $colno)) {
 			my $value = $cell->value;
-			if ($self->has_encoding) {
-				$value = encode('$self->encoding', $value);
-			} elsif ($cell->encoding == 2) {
-				$value = encode('utf-8', $cell->value);
+			if ($cell->encoding == 2) {
+				$value = encode('utf-16BE', $cell->value);
+			} elsif ($self->has_encoding) {
+				$value = encode($self->encoding, $value);
 			}
 			$cells{ $colname } = $value;
 			$cells++;

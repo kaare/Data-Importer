@@ -87,6 +87,19 @@ has file_name => (
 	isa => 'Str',
 );
 
+=head2 encoding
+
+The encoding of the spreadsheet
+
+=cut
+
+has encoding => (
+	is => 'ro',
+	isa => 'Str',
+	default => 'utf8',
+	lazy => 1,
+);
+
 =head2 import_type
 
 Three formats are supported, csv, xls, ods
@@ -296,6 +309,7 @@ sub _build_import_iterator {
 		file_name => $self->file_name,
 		mandatory => $self->mandatory,
 		optional  => $self->optional,
+		encoding  => $self->encoding,
 	);
 }
 

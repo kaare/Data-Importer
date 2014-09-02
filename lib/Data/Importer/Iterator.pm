@@ -100,7 +100,7 @@ The base class opens a file as UTF-8 and returns it.
 sub _build_file {
 	my $self = shift;
 	my $filename = $self->file_name;
-	open(my $file, "<:encoding(UTF-8)", $filename) or die "$filename: $!";
+	open(my $file, "<:encoding(utf8)", $filename) or die "$filename: $!";
 
 	return $file;
 }

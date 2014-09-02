@@ -17,7 +17,6 @@ ok(my $import = Test::Import::Products->new(
 
 ok($import->do_work, 'Import csv file');
 
-
 ok($import = Test::Import::Products->new(
 	schema => $schema,
 	file_name => 't/test.ods',

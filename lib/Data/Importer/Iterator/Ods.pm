@@ -4,7 +4,7 @@ use 5.010;
 use namespace::autoclean;
 use Moose;
 use Encode qw(encode);
-use Spreadsheet::Read qw/ReadData row/;
+use Spreadsheet::ReadSXC qw/read_sxc/;
 
 extends 'Data::Importer::Iterator';
 
@@ -34,7 +34,24 @@ The sheet name or number
 has sheet => (
 	is => 'ro',
 	isa => 'Int',
-	default => 1,
+	default => 0,
+);
+
+=head2 options
+
+Options to be passed to the Spreadsheet::ReadSXC constructor
+
+=cut
+
+has 'options' => (
+	is => 'ro',
+	isa => 'HashRef',
+	default => sub {
+		return {
+			OrderBySheet => 1,
+		};
+	},
+	lazy => 1,
 );
 
 =head1 "PRIVATE" ATTRIBUTES
@@ -61,7 +78,8 @@ The lazy builder for the ods object
 
 sub _build_ods {
 	my $self = shift;
-	my $ods = ReadData($self->file_name);
+	my $worksheets_ref = read_sxc($self->file_name, $self->options);
+	my $ods = $$worksheets_ref[0]{data};
 	return $ods;
 }
 
@@ -74,10 +92,9 @@ Return the next row of data from the file
 sub next {
 	my $self = shift;
 	my $ods = $self->ods;
-	$self->inc_lineno;
 	# Use the first row as column names:
 	if (!$self->has_column_names) {
-		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} row($ods->[$self->sheet], $self->lineno);
+		my @fieldnames = map {my $header = lc $_; $header =~ tr/ /_/; $header} @{ $ods->[$self->lineno] };
 		die "Only one column detected, please use comma ',' to separate data." if @fieldnames < 2;
 		my %fieldnames = map {$_ => 1} @fieldnames;
 		if (my @missing = grep {!$fieldnames{$_} } @{ $self->mandatory }) {
@@ -85,13 +102,13 @@ sub next {
 		}
 
 		$self->column_names(\@fieldnames);
-		$self->inc_lineno;
 	}
 	my $columns = $self->column_names;
-	my $colno = 0;
-	my @cells = row($ods->[$self->sheet], $self->lineno);
+	$self->inc_lineno;
+	my @cells = @{ $ods->[$self->lineno] || [] };
 	return unless grep { $_ } @cells;
 
+	my $colno = 0;
     @cells = map { encode($self->encoding, $_) } @cells if $self->has_encoding;
     return { map { $columns->[$colno++] => $_ } @cells };
 }

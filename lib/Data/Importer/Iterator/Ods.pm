@@ -3,7 +3,6 @@ package Data::Importer::Iterator::Ods;
 use 5.010;
 use namespace::autoclean;
 use Moose;
-use Encode qw(encode);
 use Spreadsheet::ReadSXC qw/read_sxc/;
 
 extends 'Data::Importer::Iterator';
@@ -109,7 +108,6 @@ sub next {
 	return unless grep { $_ } @cells;
 
 	my $colno = 0;
-    @cells = map { encode($self->encoding, $_) } @cells if $self->has_encoding;
     return { map { $columns->[$colno++] => $_ } @cells };
 }
 

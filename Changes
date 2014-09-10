@@ -1,6 +1,8 @@
 Revision history for Data::Importer
 
 {{$NEXT}}
+ - Ods: Correct encoding. Now it always returns utf-8 values
+ - Csv: Open the file using the given encoding.
 
 0.005     2014-09-02 19:44:28+02:00 Europe/Copenhagen
  - Add a Makefile.PL

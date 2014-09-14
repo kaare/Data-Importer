@@ -1,6 +1,8 @@
 Revision history for Data::Importer
 
 {{$NEXT}}
+
+0.006     2014-09-14 07:43:43+02:00 Europe/Copenhagen
  - Ods: Correct encoding. Now it always returns utf-8 values
  - Csv: Open the file using the given encoding.
 
